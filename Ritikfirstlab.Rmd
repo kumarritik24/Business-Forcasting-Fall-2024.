@@ -1,0 +1,160 @@
+---
+title: "Ritikfirstlab"
+author: "rk1208@scarletmail.rutgers.edu"
+date: "2024-09-22"
+output: html_document
+---
+
+```{r}
+library(readxl)
+library(ggplot2)
+library(dplyr)
+
+# 1. Load the dataset without using first row as column names
+empSurv <- read_excel("/Users/malho/Downloads/Typical_Employee_Survey_Data (2).xlsx", col_names = FALSE)
+
+# 1. Add Header Row 
+colnames(empSurv) <- c ("Age", "Gender", "Job_Satisfaction","Job_Characteristic","Experience","Promotion","Decision_Making","Budgetary_Decisions","Satisfaction","Commitment",	"Workplace_Relationships")
+
+#View the first few rows to confirm
+head(empSurv)
+#View the last few rows to confirm 
+tail(empSurv)
+
+#2. Print out the 5-point summary and boxplot (numerical columns) for each column
+#summary and boxplot of Age column 
+summary(empSurv$Age)
+boxplot(empSurv$Age,main="Boxplot of Age",ylab="Age")
+summary(empSurv)
+#summary and boxplot of Experience column
+summary(empSurv$Experience)
+boxplot(empSurv$Experience,main="Boxplot of Experience",ylab="Experience")
+summary(empSurv)
+
+#3. Convert the columns that need to be converted to Factors
+empSurv$Gender <- as.factor(empSurv$Gender)
+empSurv$Job_Satisfaction <- as.factor(empSurv$Job_Satisfaction)
+empSurv$Job_Characteristic <- as.factor(empSurv$Job_Characteristic)
+empSurv$Promotion <- as.factor(empSurv$Promotion)
+empSurv$Decision_Making <- as.factor(empSurv$Decision_Making)
+empSurv$Budgetary_Decisions <- as.factor(empSurv$Budgetary_Decisions)
+empSurv$Satisfaction <- as.factor(empSurv$Satisfaction)
+empSurv$Commitment <- as.factor(empSurv$Commitment)
+empSurv$Workplace_Relationships <- as.factor(empSurv$Workplace_Relationships)
+str(empSurv)
+
+#4.Plot the right visual for each column
+#Plot a histogram for Age
+ggplot(empSurv, aes(x = Age)) +
+  geom_histogram(binwidth = 5, fill = 'skyblue', color = 'black') +
+  ggtitle('Age of people') +
+  theme_minimal()
+
+# Plot a boxplot for Experience
+ggplot(empSurv, aes(y = Experience)) +
+  geom_boxplot(fill = 'lightgreen') +
+  ggtitle('Boxplot of Experience') +
+  theme_minimal()
+
+#Plot a histogram for experience as well 
+ggplot(empSurv, aes(x = Experience)) +
+  geom_histogram(binwidth = 1, fill = 'lightgreen', color = 'black') +
+  ggtitle('Distribution of Experience') +
+  theme_minimal()
+
+# Bar plot for Gender
+ggplot(empSurv, aes(x = Gender)) +
+  geom_bar(fill = 'lightblue') +
+  ggtitle('Gender Distribution') +
+  theme_minimal()
+
+# Bar plot for Job Satisfaction
+ggplot(empSurv, aes(x = Job_Satisfaction)) +
+  geom_bar(fill = 'lightcoral') +
+  ggtitle('Job Satisfaction Levels') +
+  theme_minimal()
+
+# Bar plot for Job Characteristic
+ggplot(empSurv, aes(x = Job_Characteristic)) +
+  geom_bar(fill = 'orange') +
+  ggtitle('Job Characteristic Frequency') +
+  theme_minimal()
+
+# Bar plot for Promotion
+ggplot(empSurv, aes(x = Promotion)) +
+  geom_bar(fill = 'lightpink') +
+  ggtitle('Promotion Status') +
+  theme_minimal()
+
+# Bar plot for Decision-Making
+ggplot(empSurv, aes(x = Decision_Making)) +
+  geom_bar(fill = 'lightblue') +
+  ggtitle('Decision-Making Involvement') +
+  theme_minimal()
+
+# Bar plot for Budgetary Decisions
+ggplot(empSurv, aes(x = Budgetary_Decisions)) +
+  geom_bar(fill = 'lightcyan') +
+  ggtitle('Budgetary Decision Involvement') +
+  theme_minimal()
+
+# Bar plot for Satisfaction
+ggplot(empSurv, aes(x = Satisfaction)) +
+  geom_bar(fill = 'lightcoral') +
+  ggtitle('Employee Satisfaction Levels') +
+  theme_minimal()
+
+# Bar plot for Commitment
+ggplot(empSurv, aes(x = Commitment)) +
+  geom_bar(fill = 'lightgreen') +
+  ggtitle('Employee Commitment Levels') +
+  theme_minimal()
+
+# Bar plot for Workplace Relationships
+ggplot(empSurv, aes(x = Workplace_Relationships)) +
+  geom_bar(fill = 'lightblue') +
+  ggtitle('Workplace Relationships Levels') +
+  theme_minimal()
+
+#5. Plot scatter plots to show few relationships 
+# Scatter plot between Age vs Experience with a trend line
+ggplot(empSurv, aes(x = Age, y = Experience)) +
+  geom_point(color = 'blue', alpha = 0.6) +
+  geom_smooth(method = 'lm', color = 'red', se = FALSE) +  # Adds a trend line
+  ggtitle('Scatter Plot: Age vs Experience') + 
+  theme_minimal() +
+  xlab('Age') +
+  ylab('Experience')
+
+# Scatter plot of Age vs Experience, colored by Gender
+ggplot(empSurv, aes(x = Age, y = Experience, color = Gender)) +
+  geom_point(size = 3, alpha = 0.7) +  # Scatter plot with points
+  ggtitle('Scatter Plot: Age vs Experience by Gender') +  # Title
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +  # Center-align title
+  xlab('Age') +  # X-axis label
+  ylab('Experience') +  # Y-axis label
+  scale_color_manual(values = c('blue', 'red'))  # Custom colors for Gender
+
+# Scatter plot of Experience vs Satisfaction, colored by Gender
+ggplot(empSurv, aes(x = Experience, y = Satisfaction, color = Gender)) +
+  geom_point(size = 3, alpha = 0.7) +
+  ggtitle('Scatter Plot: Experience vs Satisfaction by Gender') +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  xlab('Experience') +
+  ylab('Satisfaction') +
+  scale_color_manual(values = c('blue', 'red'))
+
+# Scatter plot of Age vs Satisfaction, colored by Gender
+ggplot(empSurv, aes(x = Age, y = Satisfaction, color = Gender)) +
+  geom_point(size = 3, alpha = 0.7) +  # Scatter plot with points
+  ggtitle('Scatter Plot: Age vs Satisfaction by Gender') +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  xlab('Age') +
+  ylab('Satisfaction') +
+  scale_color_manual(values = c('blue', 'red'))  # Custom colors for Gender
+
+```
+
